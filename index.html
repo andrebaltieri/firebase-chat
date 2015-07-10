@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Amizade | SignalR</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container well">
+    <ul id="messages"></ul>
+</div>
+
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+    <br>
+    <div class="container">
+        <div class="col-md-10">
+            <input type="text"
+                   class="form-control"
+                   id="text-message"
+                   placeholder="Digite uma mensagem" />
+        </div>
+        <div class="col-md-2">
+            <button id="send-button"
+                    class="btn btn-primary btn-lg" >
+                Enviar
+            </button>
+        </div>
+    </div>
+    <br>
+</nav>
+
+<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+<script type="text/javascript">
+    var db = new Firebase('https://chat-balta-demo.firebaseio.com/chat');
+    $('#send-button').click(function () {
+        var message = $('#text-message').val();
+        db.push({ message: message });
+        $('#text-message').val("");
+    });
+
+    db.on('child_added', function(snapshot) {
+        var data = snapshot.val();
+        $('#messages').append($('<li>').text(data.message));
+    });
+</script>
+</body>
+</html>
